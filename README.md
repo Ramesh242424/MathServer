@@ -1,5 +1,5 @@
 # Ex.05 Design a Website for Server Side Processing
-## Date:04.05.25
+## Date:13/04/2025
 
 ## AIM:
  To design a website to calculate the power of a lamp filament in an incandescent bulb in the server side. 
@@ -11,7 +11,7 @@ P = I<sup>2</sup>R
 <br> I --> Intensity
 <br> R --> Resistance
 
-## DESIGN STEPS:c
+## DESIGN STEPS:
 
 ### Step 1:
 Clone the repository from GitHub.
@@ -32,117 +32,102 @@ Create a HTML file to implement form based input and output.
 Publish the website in the given URL.
 
 ## PROGRAM :
-~~~
-math.html
+
+```
+index.html
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset='utf-8'>
-<meta http-equiv='X-UA-Compatible' content='IE=edge'>
-<title>Power Of a Lamp Filament</title>
-<meta name='viewport' content='width=device-width, initial-scale=1'>
-<style type="text/css">
-body {
-    background-color: rgb(58, 124, 148);
-}
-.edge {
-    width: 100%;
-    padding-top: 250px;
-    text-align: center;
-}
-.box {
-    display: inline-block;
-    border: thick dashed rgb(187, 9, 96);
-    width: 500px;
-    min-height: 300px;
-    font-size: 20px;
-    background-color: rgb(91, 44, 166);
-}
-.formelt {
-    color: black;
-    text-align: center;
-    margin-top: 7px;
-    margin-bottom: 6px;
-}
-h1 {
-    color: black;
-    padding-top: 20px;
-}
-</style>
+    <style>
+        .Calculate {
+            width: 30%;
+            padding: 20px;
+            margin: auto;
+            background-color: rgb(25, 141, 180);
+            text-align: center;
+            border-radius:20px;
+        }
+        label {
+            font-size: 20px;
+        }
+        p {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        h1 {
+            text-align: center;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            background-color: #46a146;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+
+        }
+    </style>
+    <title>Document</title>
 </head>
 <body>
-<div class="edge">
-    <div class="box">
-        <h1>power of a lamp filament </h1>
-        <h3>AAKIL AHAMED S(212224040002)</h3>
-        <form method="POST">
+    <h1>Calculating Power of a Lamp</h1>
+    <div class="Calculate">
+        <form action="{% url 'home' %}" method="post">
             {% csrf_token %}
-            <div class="formelt">
-                Intensity: <input type="text" name="intensity" value="{{i}}">m<br/>
-            </div>
-            <div class="formelt">
-                Resistance: <input type="text" name="resistance" value="{{r}}">m<br/>
-            </div>
-            <div class="formelt">
-                <input type="submit" value="Calculate"><br/>
-            </div>
-            <div class="formelt">
-                Power: <input type="text" name="power" value="{{power}}">m<sup>2</sup><br/>
-            </div>
+            <label>Intensity:</label><br>
+            <input type="text" name="intensity-input"><br>
+
+            <label>Resistance:</label><br>
+            <input type="text" name="resistance-input"><br>
+
+            <button type="submit">Calculate</button>
+
+            <p>The power of the lamp is: {{ output }}</p>
         </form>
     </div>
-</div>
 </body>
 </html>
 
-views.html
+
+
+views.py
 
 from django.shortcuts import render
+
 def power(request):
-    context = {}
-    context['power'] = "0"
-    context['i'] = "0"
-    context['r'] = "0"
-    if request.method == 'POST':
-        print("POST method is used")
-        print('request.POST:', request.POST)
-        i = request.POST.get('intensity', '0') 
-        r = request.POST.get('resistance', '0') 
-        print('intensity =', i)
-        print('resistance =', r)
-        power =  int(i) * int(i) * int(r)
-        context['power'] = power
-        context['i'] = i
-        context['r'] = r
-        print('Power =', power)
-    
-    return render(request, 'mathapp/math.html',context)
+    if request.method=='POST':
+        intesity_value=int(request.POST.get('intensity-input'))
+        resistance_value=int(request.POST.get('resistance-input'))
+        power = (intesity_value ** 2) * resistance_value
+        return render(request, 'index.html',{'output':power})
+    return render (request, 'index.html')
 
 
-    urls.py
+urls.py
 
-  from django.contrib import admin
+
+from django.contrib import admin
 from django.urls import path
-from mathapp import views
+from app import views
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('power/',views.power,name="power"),
-    path('',views.power,name="power")
-]  
+    #path("admin/", admin.site.urls),
+    path('',views.power,name='home')
+]
 
 
+```
 
-    
-~~~
 
 ## SERVER SIDE PROCESSING:
-~~
-![alt text](<Screenshot 2025-05-04 224124.png>)
 
-
+![alt text](2.png)
 ## HOMEPAGE:
-~~~
-![alt text](<Screenshot (36).png>)
 
+![alt text](1.png)
 ## RESULT:
 The program for performing server side processing is completed successfully.
