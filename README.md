@@ -1,5 +1,5 @@
 # Ex.05 Design a Website for Server Side Processing
-## Date:13/04/2025
+## Date:
 
 ## AIM:
  To design a website to calculate the power of a lamp filament in an incandescent bulb in the server side. 
@@ -32,102 +32,138 @@ Create a HTML file to implement form based input and output.
 Publish the website in the given URL.
 
 ## PROGRAM :
-
 ```
-index.html
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
-        .Calculate {
-            width: 30%;
-            padding: 20px;
-            margin: auto;
-            background-color: rgb(25, 141, 180);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Calculator</title>
+    <style type="text/css">
+        body {
+            background-color: #bdd1d3;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
             text-align: center;
-            border-radius:20px;
-        }
-        label {
-            font-size: 20px;
-        }
-        p {
-            font-size: 20px;
-            font-weight: bold;
+            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            color:brown;
         }
         h1 {
-            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 20px;
         }
-        input, button {
+        .container {
+            background-color: #c9c4b7;
+            border-radius: 100%;
+            padding: 75px;
+            box-shadow:#1fe374;
+            display:inline-block;
+            margin-top: 100px;
+        }
+        label {
+            font-size: 150%;
+            display:flow-root;
+            margin: 15px 0 5px;
+            
+        }
+        input[type="text"] {
+            width: calc(75% - 24px);
             padding: 10px;
-            margin: 10px 0;
+            border-radius: 12px;
+            border: 1px solid #051313;
+            margin-bottom: 15px;
+            font-size: 1em;
         }
-        button {
-            background-color: #46a146;
-            color: white;
+        input[type="submit"] {
+            background-color: #1fe374;
+            color: rgb(211, 241, 247);
             border: none;
-            cursor: pointer;
             border-radius: 10px;
-
+            padding: 10px 21px;
+            font-size: 1em;
+            cursor:pointer;
+        }
+        button:hover {
+            background-color: #d588b2;
+        }
+        p {
+            font-size: 1.2em;
+            margin-top: 20px;
         }
     </style>
-    <title>Document</title>
 </head>
 <body>
-    <h1>Calculating Power of a Lamp</h1>
-    <div class="Calculate">
-        <form action="{% url 'home' %}" method="post">
+    <div class="container">
+        <h1>The Power of the Bulb</h1>
+        <form method="POST">
             {% csrf_token %}
-            <label>Intensity:</label><br>
-            <input type="text" name="intensity-input"><br>
-
-            <label>Resistance:</label><br>
-            <input type="text" name="resistance-input"><br>
-
-            <button type="submit">Calculate</button>
-
-            <p>The power of the lamp is: {{ output }}</p>
-        </form>
+        <label >Intensity (A):</label>
+        <input type="text" name="intensity" value="{{I}}">
+        
+        <label >Resistance (Ohm):</label>
+        <input type="text" name="resistance" value="{{R}}"><br><br>
+        <input type="submit" value="Calculate"><br><br>
+        <label>Power(watts):</label>
+        <input type="text" name="power" value="{{power}}">
     </div>
+</form>        
+
 </body>
 </html>
-
-
-
+```
 views.py
-
+```
 from django.shortcuts import render
+def power_calculate(request):
+    context = {}
+    context['power'] = ""
+    context['I'] = ""
+    context['R'] = ""  
 
-def power(request):
-    if request.method=='POST':
-        intesity_value=int(request.POST.get('intensity-input'))
-        resistance_value=int(request.POST.get('resistance-input'))
-        power = (intesity_value ** 2) * resistance_value
-        return render(request, 'index.html',{'output':power})
-    return render (request, 'index.html')
+    if request.method == 'POST':
 
+        I = float(request.POST.get('intensity', '0')) 
 
+        R = float(request.POST.get('resistance', '0')) 
+        
+        power = (I*I)*R
+       
+        context['power'] = f"{ power:.2f}"
+        
+        context['I'] = I
+        
+        context['R'] = R
+        
+        print(f"POST method is used")
+        print(f"request= {request}")
+        print(f"Intensity = {I}")
+        print(f"Resistance = {R}")
+        print(f"Power = {power}")
+       
+      
+    
+    return render(request, 'app1/app.html',context)
+```
 urls.py
-
-
+```
 from django.contrib import admin
 from django.urls import path
-from app import views
-
+from app1 import views
 urlpatterns = [
-    #path("admin/", admin.site.urls),
-    path('',views.power,name='home')
+    path('admin/', admin.site.urls),
+    path('powerofbulb/',views.power_calculate,name="powerofbulb"),
+    path('',views.power_calculate,name="powerofbulb")
 ]
-
-
 ```
-
 
 ## SERVER SIDE PROCESSING:
 
-![alt text](2.png)
-## HOMEPAGE:
+![Screenshot 2025-04-30 132129](https://github.com/user-attachments/assets/33607706-21f8-435f-a872-9620740334e4)
 
-![alt text](1.png)
+## HOMEPAGE:
+![image](https://github.com/user-attachments/assets/9d6c39d6-4621-4a32-85ce-0f2a16fa6e48)
+
+
 ## RESULT:
 The program for performing server side processing is completed successfully.
